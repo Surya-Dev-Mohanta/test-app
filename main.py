@@ -1,40 +1,35 @@
 import streamlit as st
-import pandas as pd
+import joblib
 
-# Page settings
-st.set_page_config(page_title="My Online App", page_icon="🌐")
+# Load model (make sure model.pkl is in repo)
+model = joblib.load("model.pkl")
+
+# Page config
+st.set_page_config(page_title="SMS Spam Detector", page_icon="📩")
 
 # Title
-st.title("🌐 My First Online Streamlit App")
+st.title("📩 SMS Spam Detection App")
 
-# Input
-name = st.text_input("Enter your name")
+st.write("Enter a message below to check whether it is Spam or Not Spam.")
 
-if name:
-    st.success(f"Hello {name} 👋 Welcome to your online app!")
+# Input box
+message = st.text_area("Enter SMS message")
 
-# Simple selectbox
-choice = st.selectbox("Choose a field", ["Machine Learning", "Web Dev", "Python"])
+# Predict button
+if st.button("Predict"):
+    if message.strip() == "":
+        st.warning("Please enter a message!")
+    else:
+        prediction = model.predict([message])
 
-st.write("You selected:", choice)
+        if prediction[0] == 1:
+            st.error("🚨 Spam Message Detected!")
+        else:
+            st.success("✅ This is a Normal Message")
 
-# Button
-if st.button("Click Me"):
-    st.info("Button clicked successfully!")
-
-# Sample Data
-st.subheader("📊 Sample Data")
-data = pd.DataFrame({
-    "Name": ["Dev", "AI", "ML"],
-    "Score": [90, 85, 88]
-})
-
-st.dataframe(data)
-
-# File Upload
-st.subheader("📂 Upload CSV File")
-file = st.file_uploader("Upload your file")
-
+# Footer
+st.markdown("---")
+st.caption("Built with Streamlit 🚀")
 if file:
     df = pd.read_csv(file)
     st.write("Preview of uploaded data:")
