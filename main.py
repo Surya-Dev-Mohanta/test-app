@@ -21,7 +21,7 @@ from nltk.corpus import stopwords
 # -----------------------------
 @st.cache_data
 def load_data():
-    df = pd.read_csv("dataset_with_researched.csv", encoding='latin-1')[['v1', 'v2']]
+    df = pd.read_csv("spam.csv", encoding='latin-1')[['v1', 'v2']]
     df.columns = ['label', 'message']
     df['label'] = df['label'].map({'ham': 0, 'spam': 1})
     return df
